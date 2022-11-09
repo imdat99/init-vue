@@ -1,7 +1,10 @@
 @use "./var" as *;
+// @import "./wp";
 @import "./tooltip.scss";
 @import "./grid.scss";
-
+.ps {
+  height: 100%;
+}
 :root {
   --primary-color: #{$teal_8};
   --secondary-color: #{$teal_7};
@@ -238,5 +241,93 @@ header {
     .icon.sun {
       display: none;
     }
+  }
+}
+.wp-content-container {
+  blockquote {
+    margin-top: 1em;
+    margin-bottom: 1em;
+    margin-left: 40px;
+    margin-right: 40px;
+  }
+  dd {
+    margin-left: 40px;
+  }
+  dl {
+    margin-top: 1em;
+    margin-bottom: 1em;
+    margin-left: 0;
+    margin-right: 0;
+  }
+  fieldset {
+    margin-left: 2px;
+    margin-right: 2px;
+    padding-top: 0.35em;
+    padding-bottom: 0.625em;
+    padding-left: 0.75em;
+    padding-right: 0.75em;
+  }
+  figure {
+    margin-top: 1em;
+    margin-bottom: 1em;
+    margin-left: 40px;
+    margin-right: 40px;
+  }
+  form {
+    margin-top: 0em;
+  }
+  h1 {
+    margin-top: 0.67em;
+    margin-bottom: 0.67em;
+    margin-left: 0;
+    margin-right: 0;
+  }
+  h2 {
+    margin-top: 0.83em;
+    margin-bottom: 0.83em;
+    margin-left: 0;
+    margin-right: 0;
+  }
+  h3 {
+    margin-top: 1em;
+    margin-bottom: 1em;
+    margin-left: 0;
+    margin-right: 0;
+  }
+  h4 {
+    margin-top: 1.33em;
+    margin-bottom: 1.33em;
+    margin-left: 0;
+    margin-right: 0;
+  }
+  h5 {
+    margin-top: 1.67em;
+    margin-bottom: 1.67em;
+    margin-left: 0;
+    margin-right: 0;
+  }
+  h6 {
+    margin-top: 2.33em;
+    margin-bottom: 2.33em;
+    margin-left: 0;
+    margin-right: 0;
+  }
+  hr {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  menu {
+    margin-top: 1em;
+    margin-bottom: 1em;
+    margin-left: 0;
+    margin-right: 0;
+  }
+  p {
+    margin-top: 1em;
+    margin-bottom: 1em;
+    margin-left: 0;
+    margin-right: 0;
   }
 }
