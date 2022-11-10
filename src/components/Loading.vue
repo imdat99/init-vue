@@ -12,6 +12,7 @@ defineProps({
 </script>
 <style lang="scss" scoped>
 @use "../assets/var" as *;
+@import url("https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap");
 .loading-screen-leave-active {
   transition: all 0.5s ease;
 }
@@ -72,7 +73,7 @@ defineProps({
   content: "loading";
   color: #fafad2;
   text-shadow: 0.5vmin 0.6vmin 1rem #000;
-  font-family: fantasy;
+  font-family: "Fredoka One", cursive;
   display: block;
   width: 40vmin;
   height: 20vmin;
