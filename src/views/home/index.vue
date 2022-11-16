@@ -1,25 +1,62 @@
 <script setup lang="ts">
 import Loading from "@/components/Loading.vue";
 import Modal from "@/components/Modal.vue";
-import { getData } from "@/utils/axios.config";
+import { URL } from "@/utils/constant";
+import { useQuery } from "@vue/apollo-composable";
+import { useHead } from "@vueuse/head";
+import gql from "graphql-tag";
 import { ref } from "vue";
-import { useQuery } from "vue-query";
 const showModal = ref(false);
 const showAbout = ref(false);
 const active = ref(false);
 
-const query = useQuery(["todos"], getData, {
-  refetchOnWindowFocus: false,
+const homeQuery = gql`
+  query {
+    page(id: "cG9zdDo5") {
+      title(format: RENDERED)
+      featuredImage {
+        node {
+          sourceUrl(size: LARGE)
+        }
+      }
+      enqueuedStylesheets {
+        nodes {
+          src
+          handle
+          id
+        }
+      }
+      content(format: RENDERED)
+      myName
+      bio
+    }
+    socials {
+      nodes {
+        title(format: RENDERED)
+        linkContent
+      }
+    }
+  }
+`;
+
+const { result, loading } = useQuery(homeQuery);
+
+useHead({
+  link: () =>
+    result.value?.page.enqueuedStylesheets.nodes
+      .filter((item: any) => item.src)
+      .map((item: any) => ({
+        rel: "stylesheet",
+        type: "text/css",
+        href: URL.GRAPHQL + item.src,
+        id: item.handle,
+      })),
 });
 </script>
 
 <template>
-  <Loading :visible="query.isLoading.value"></Loading>
-  <div
-    class="row home-container"
-    :class="{ active }"
-    v-if="!query.isLoading.value"
-  >
+  <Loading :visible="loading"></Loading>
+  <div class="row no-gutters" :class="{ active }" v-if="!loading">
     <div
       class="col c-12"
       :class="{ 'c-0': showAbout, 'l-6': showAbout, 'l-12': !showAbout }"
@@ -27,21 +64,21 @@ const query = useQuery(["todos"], getData, {
       <div class="info-container">
         <div class="card fade-in" :class="{ active }">
           <div class="img-box" @click="active = !active">
-            <img
-              src="https://images.pexels.com/photos/13408561/pexels-photo-13408561.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-              alt="avatar"
-            />
+            <img :src="result.page.featuredImage.node.sourceUrl" alt="avatar" />
           </div>
           <div class="content">
             <div class="details">
-              <h2>Lê Thành Đạt<br /><span>web developer</span></h2>
+              <h2>
+                {{ result.page.myName }}<br /><span>{{ result.page.bio }}</span>
+              </h2>
               <div class="data">
-                <a href="/">
-                  <h3><i class="fa-brands fa-facebook"></i></h3>
+                <a
+                  v-for="(data, index) in result.socials.nodes"
+                  :key="index"
+                  :href="data.linkContent.split(',')[0]"
+                >
+                  <h3><i :class="[data.linkContent.split(',')[1]]"></i></h3>
                 </a>
-                <h3><i class="fa-brands fa-whatsapp"></i></h3>
-                <h3><i class="fa-brands fa-instagram"></i></h3>
-                <h3><i class="fa-brands fa-github"></i></h3>
               </div>
               <div class="action">
                 <button @click="showModal = true">Ask me</button>
@@ -56,13 +93,12 @@ const query = useQuery(["todos"], getData, {
       <div class="col c-12" v-if="showAbout" :class="{ 'l-6': showAbout }">
         <div class="about-container fade-in">
           <div class="about-content">
-            <div class="content-container">
-              <ul>
-                <li v-for="data in query.data.value" :key="data.id">
-                  {{ data.title }}
-                </li>
-              </ul>
-            </div>
+            <perfect-scrollbar>
+              <div
+                v-html="result.page.content"
+                class="wp-content-container"
+              ></div>
+            </perfect-scrollbar>
             <button
               v-tooltip:left="'Close'"
               type="button"
@@ -96,16 +132,7 @@ const query = useQuery(["todos"], getData, {
     </template>
   </Modal>
 </template>
-<style scoped lang="scss">
-.home-container {
-  // width: 100vw;
-  // background-color: transparent;
-  // transition: background-color 1s;
-  &.active {
-    background-color: linear-gradient(45deg, #fbda61, #ff5acd);
-  }
-  // background: linear-gradient(45deg, #2c3e50, #000000);
-}
+<style lang="scss" scoped>
 .about-container,
 .info-container {
   display: flex;
@@ -120,7 +147,7 @@ const query = useQuery(["todos"], getData, {
   border-radius: 20px;
   box-shadow: 1rem 35px 80px var(--main-shadow-color);
   background: var(--second-background-color);
-  padding: 10px;
+  padding: 20px;
 }
 .card {
   position: relative;

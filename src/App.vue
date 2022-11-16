@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useHead } from "@vueuse/head";
 import { onBeforeMount, ref, watch } from "vue";
 import { RouterLink, RouterView } from "vue-router";
 const dark = ref(false);
@@ -12,6 +13,16 @@ watch(dark, () => {
   } else {
     document.documentElement.classList.remove("theme-dark");
   }
+});
+useHead({
+  title: "dat09.fun",
+  link: [
+    {
+      rel: "stylesheet",
+      type: "text/css",
+      href: "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css",
+    },
+  ],
 });
 </script>
 
@@ -27,16 +38,11 @@ watch(dark, () => {
         </RouterLink>
       </li>
       <li class="dropdown_item-2">
-        <RouterLink to="/about" active-class="active">
-          <span> About </span>
-        </RouterLink>
-      </li>
-      <li class="dropdown_item-3">
         <RouterLink to="/blog" active-class="active">
           <span> Blog </span>
         </RouterLink>
       </li>
-      <li class="dropdown_item-4">
+      <li class="dropdown_item-3">
         <div class="theme-toggle">
           <input
             type="checkbox"
